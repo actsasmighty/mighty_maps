@@ -1,6 +1,9 @@
+require "virtus"
+
 module MightyMaps
   module Types
-    require_relative "./types/block"
-    require_relative "./types/seat"
+    autoload :Block, "mighty_maps/types/block"
+    autoload :Seat, "mighty_maps/types/seat"
+    autoload :SeatMap, "mighty_maps/types/seat_map"
   end
 end

@@ -1,9 +1,7 @@
 describe "Integration tests" do
   describe "Map with blocks" do
     it do
-      class MyMap
-        include MightyMaps::DSL
-
+      my_map = MightyMaps::Types::SeatMap.new do
         name "Hall of fame"
 
         # verbose writing
@@ -33,7 +31,7 @@ describe "Integration tests" do
         end
       end
 
-      w = MyMap.to_ruby #(blocks: :verbose)
+      #w = MyMap.to_ruby #(blocks: :verbose)
 
       binding.pry
     end

@@ -1,12 +1,12 @@
 module MightyMaps
   module Types
     class Seat
-      def initialize(options = {})
-        @x = options[:x]
-        @y = options[:y]
-        @row = options[:row]
-        @number = options[:number]
-      end
+      include Virtus.model
+
+      attribute :x, Integer
+      attribute :y, Integer
+      attribute :row, String
+      attribute :number, String
 
       def number(*args)
         case args.length

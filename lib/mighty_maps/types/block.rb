@@ -1,11 +1,11 @@
 module MightyMaps
   module Types
     class Block
-      def initialize(options = {})
-        @description = options[:description]
-        @name = options[:name]
-        @seats = []
-      end
+      include Virtus.model
+
+      attribute :description, String
+      attribute :name, String
+      attribute :seats, Array[Types::Seat]
 
       def description(*args)
         case args.length
@@ -28,11 +28,6 @@ module MightyMaps
         new_seat.instance_exec(&block_param) if block_given?
         @seats << new_seat
       end
-
-      def seats
-        @seats
-      end
     end
   end
 end
-

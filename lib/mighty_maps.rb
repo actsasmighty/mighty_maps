@@ -1,3 +1,5 @@
+require "active_support"
+require "active_support/core_ext"
 require "mighty_maps/version"
 
 module MightyMaps
