@@ -4,6 +4,8 @@ gemspec
 
 group :development do
   gem "bundler"
+  gem "jasmine"
+  gem "opal"
   gem "rake"
   gem "rubocop", "~> 0.41.1", require: false
   gem "rspec", "~> 3.0"
