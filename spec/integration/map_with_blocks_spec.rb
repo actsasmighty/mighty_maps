@@ -33,11 +33,23 @@ describe "Integration tests" do
         block "B8" do
           description "foo"
 
-          row 6 do
-            seat 1, x: 1.1, y: 2.1
+          row number: 1 do
+            seat 1
+          end
+
+          row do
+            number 2
+
+            seat 2
+          end
+
+          row 3 do
+            seat 3, x: 1.1, y: 2.1
           end
         end
       end
+
+      binding.pry
 
       # B5
       expect(map.blocks[0].name).to eq("B5")

@@ -54,6 +54,23 @@ module MightyMaps
         else raise ArgumentError
         end
       end
+
+      #
+      # serialization
+      #
+      def as_json
+        {
+          x: x,
+          y: y,
+          row: row,
+          number: number
+        }
+        .reject { |_, value| value.nil? }
+      end
+
+      def to_json(options = nil)
+        JSON.generate(as_json, options)
+      end
     end
   end
 end

@@ -31,6 +31,18 @@ module MightyMaps
         else raise ArgumentError
         end
       end
+
+      def as_json
+        {
+          name: name,
+          blocks: blocks.map(&:as_json)
+        }
+        .reject { |_,v| v.nil? }
+      end
+
+      def to_json(*args)
+        JSON.generate(as_json)
+      end
     end
   end
 end
