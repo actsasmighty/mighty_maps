@@ -3,12 +3,14 @@ module MightyMaps
     class SeatMap
       attr_accessor :blocks
       attr_accessor :name
+      attr_accessor :x
+      attr_accessor :y
 
-      def initialize(options = {}, &block_param)
+      def initialize(options = {})
         self.blocks = options[:blocks] || options["blocks"] || []
         self.name = options[:name] || options["name"]
-
-        instance_exec(&block_param) if block_given?
+        self.x = options[:x] || options["x"] || 0
+        self.y = options[:y] || options["y"] || 0
       end
 
       def block(options = {}, &block_param)

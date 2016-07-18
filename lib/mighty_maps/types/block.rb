@@ -3,14 +3,20 @@ module MightyMaps
     class Block
       attr_accessor :description
       attr_accessor :name
+      attr_accessor :points
+      attr_accessor :rows
       attr_accessor :seats
+      attr_accessor :rx
+      attr_accessor :ry
 
-      def initialize(name = nil, **options, &block_param)
+      def initialize(options = {})
         self.description = options[:description] || options["description"]
         self.name = name || options[:name] || options["name"]
+        self.points = options[:points] || options["points"] || []
+        self.rows = options[:rows] || options["rows"] || []
         self.seats = options[:seats] || options["seats"] || []
-
-        instance_exec(&block_param) if block_given?
+        self.rx = options[:rx] || options["rx"]
+        self.ry = options[:ry] || options["ry"]
       end
 
       def as_json
