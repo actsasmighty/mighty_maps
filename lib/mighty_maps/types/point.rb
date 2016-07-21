@@ -6,12 +6,32 @@ module MightyMaps
       attr_accessor :x
       attr_accessor :y
 
+      include CallUnlessNil
+      include FixedPrecisionAdd
+
+      private :call_unless_nil
+      private :fadd
+
       def initialize(options = {})
-        self.rx = options && (options[:rx] || options["rx"])
-        self.ry = options && (options[:ry] || options["ry"])
-        self.x = options && (options[:x] || options["x"])
-        self.y = options && (options[:y] || options["y"])
+        call_unless_nil(:rx=, options[:rx] || options["rx"])
+        call_unless_nil(:ry=, options[:ry] || options["ry"])
+        call_unless_nil(:x=, options[:x] || options["y"])
+        call_unless_nil(:y=, options[:y] || options["y"])
       end
+
+      public # normalization
+
+      def normalize(reference = Types::Point.new(x: 0, y: 0))
+        abs_x = x || fadd(reference.x, rx)
+        abs_y = y || fadd(reference.y, ry)
+
+        self.class.new(
+          x: abs_x,
+          y: abs_y
+        )
+      end
+
+      public # serialization
 
       def as_json
         {
@@ -20,7 +40,7 @@ module MightyMaps
           x: x,
           y: y,
         }
-        .reject { |_, value| value.nil? }
+        .reject { |_, value| value.nil? || (value.respond_to?(:empty?) && value.empty?) }
       end
 
       def to_json(options = nil)

@@ -13,11 +13,7 @@ module MightyMaps
         self.y = options[:y] || options["y"] || 0
       end
 
-      def block(options = {}, &block_param)
-        @blocks << new_block = Types::Block.new(options)
-        new_block.instance_exec(&block_param) if block_given?
-        self
-      end
+      public # custom accessors
 
       def blocks=(values)
         raise ArgumentError unless values.is_a?(Array)
@@ -26,20 +22,33 @@ module MightyMaps
         end
       end
 
-      def name(*args)
-        case args.length
-        when 0 then @name
-        when 1 then @name = args.first
-        else raise ArgumentError
+      public # normalization
+
+      def normalize
+        abs_x = x
+        abs_y = y
+
+        self.class.new(
+          blocks: blocks.map do |seat_map_block|
+            seat_map_block.normalize(Types::Point.new(x: abs_x, y: abs_y))
+          end,
+          name: name,
+          x: abs_x,
+          y: abs_y,
+        )
+        .tap do |r|
+          binding.pry
         end
       end
+
+      public # serialization
 
       def as_json
         {
           name: name,
           blocks: blocks.map(&:as_json)
         }
-        .reject { |_,v| v.nil? }
+        .reject { |_, value| value.nil? || (value.respond_to?(:empty?) && value.empty?) }
       end
 
       def to_json(*args)

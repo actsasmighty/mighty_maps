@@ -19,7 +19,6 @@ module MightyMaps
       end
 
       def point(value)
-        binding.pry
         @block.points = [@block.points, value].flatten(1) # force new array creation
       end
 

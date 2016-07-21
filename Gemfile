@@ -31,8 +31,6 @@ group :development do
     else
       gem "pry-byebug"
     end
-
-    gem "pry-syntax-hacks"
   end
 end
 

@@ -8,33 +8,34 @@ module MightyMaps
       attr_accessor :seats
       attr_accessor :rx
       attr_accessor :ry
+      attr_accessor :x
+      attr_accessor :y
+
+      include CallUnlessNil
+      include FixedPrecisionAdd
+
+      private :call_unless_nil
+      private :fadd
 
       def initialize(options = {})
-        self.description = options[:description] || options["description"]
-        self.name = name || options[:name] || options["name"]
-        self.points = (options[:points] || options["points"] || [])
-        self.rows = options[:rows] || options["rows"] || []
-        self.seats = options[:seats] || options["seats"] || []
-        self.rx = options[:rx] || options["rx"]
-        self.ry = options[:ry] || options["ry"]
+        call_unless_nil(:description=, options[:description] || options["description"])
+        call_unless_nil(:name=, options[:name] || options["name"])
+        call_unless_nil(:points=, options[:points] || options["points"] || [])
+        call_unless_nil(:rows=, options[:rows] || options["rows"] || [])
+        call_unless_nil(:seats=, options[:seats] || options["seats"] || [])
+        call_unless_nil(:rx=, options[:rx] || options["rx"])
+        call_unless_nil(:ry=, options[:ry] || options["ry"])
+        call_unless_nil(:x=, options[:x] || options["y"])
+        call_unless_nil(:y=, options[:y] || options["y"])
       end
 
-      #
-      # custom accessors
-      #
+      public # custom accessors
+      
       def points=(values)
         raise ArgumentError unless values.is_a?(Array)
         @points = values.map do |value|
           value.is_a?(Types::Point) ? value : Types::Point.new(value)
         end
-      end
-
-      def left_bottom
-        bounding_box.left_bottom
-      end
-      
-      def left_top
-        bounding_box.left_top
       end
 
       def seats=(values)
@@ -44,26 +45,55 @@ module MightyMaps
         end
       end
 
-      #
-      # serialization
-      #
+      public # methods
+
+      def left_bottom
+        bounding_box.left_bottom
+      end
+      
+      def left_top
+        bounding_box.left_top
+      end
+
+      public # normalization
+
+      def normalize(reference = Types::Point.new(x: 0, y: 0))
+        abs_x = fadd(reference.x, rx)
+        abs_y = fadd(reference.y, ry)
+        descendants_reference = bounding_box.normalize(Types::Point.new(x: abs_x, y: abs_y)).left_top
+
+        self.class.new(
+          description: description,
+          name: name,
+          points: points.map do |block_point|
+            block_point.normalize(descendants_reference)
+          end,
+          rows: rows.map do |block_row|
+            block_row.normalize(descendants_reference)
+          end,
+          x: abs_x,
+          y: abs_y
+        )
+      end
+
+      public # serialization
+      
       def as_json
         {
-          name: name,
           description: description,
+          name: name,
+          points: points.map(&:as_json),
+          rows: rows.map(&:as_json),
           seats: seats.map(&:as_json)
         }
-        .reject { |_, value| value.nil? }
+        .reject { |_, value| value.nil? || (value.respond_to?(:empty?) && value.empty?) }
       end
 
       def to_json(options = nil)
         JSON.generate(as_json, options)
       end
 
-      #
-      # private helpers
-      #
-      private
+      private # helpers
     
       def bounding_box
         Types::Rectangle.new(

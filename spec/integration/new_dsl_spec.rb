@@ -7,16 +7,16 @@ describe "Integration tests" do
         define :seat_margin, 2
         define :seat_size, 10
 
-        block "Pit left", rx: 12.12, ry: 14.14 do
+        block "Pit left", rx: 12.1, ry: 14.2 do
           points [
-            { rx: 489.21, ry: 393.89 },
-            { rx: 341.21, ry: 445.89 },
-            { rx: 345.21, ry: 705.89 },
-            { rx: 509.21, ry: 677.89 },
-            { rx: 625.21, ry: 605.89 }
+            { rx:  50, ry:  50 },
+            { rx: 350, ry:  50 },
+            { rx: 350, ry: 400 },
+            { rx:  10, ry: 400 },
+            { rx:  10, ry: 100 }
           ]
 
-          row "A", rx: 20, ry: 200 do
+          row "A", rx: 55, ry: 70 do
             seats 1..12, rx: seat_size + seat_margin, ry: -seat_size
           end
         end
@@ -34,8 +34,8 @@ describe "Integration tests" do
         end
       end
 
+      normalized_map = map.normalize
       binding.pry
-      map
     end
   end
 end

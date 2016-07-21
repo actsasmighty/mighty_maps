@@ -14,19 +14,28 @@ module MightyMaps
       end
 
       def left_top=(value)
-        @left_top = Types::Point.new(value)
+        @left_top = value.is_a?(Point) ? value : Types::Point.new(value)
       end
 
       def left_bottom=(value)
-        @left_bottom = Types::Point.new(value)
+        @left_bottom = value.is_a?(Point) ? value : Types::Point.new(value)
+      end
+
+      def normalize(reference = Types::Point.new(x: 0, y: 0))
+        self.class.new(
+          left_top: left_top.normalize(reference),
+          left_bottom: left_bottom.normalize(reference),
+          right_top: right_top.normalize(reference),
+          right_bottom: right_bottom.normalize(reference)
+        )
       end
 
       def right_top=(value)
-        @right_top = Types::Point.new(value)
+        @right_top = value.is_a?(Point) ? value : Types::Point.new(value)
       end
 
       def right_bottom=(value)
-        @right_bottom = Types::Point.new(value)
+        @right_bottom = value.is_a?(Point) ? value : Types::Point.new(value)
       end
 
       def as_json
