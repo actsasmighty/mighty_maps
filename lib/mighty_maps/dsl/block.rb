@@ -1,10 +1,17 @@
 module MightyMaps
   class DSL
     class Block
-      def initialize(block, parent: nil, global: nil)
+      def initialize(block, global: nil, parent: nil, seat_map: nil)
         @block = block
         @global = global
         @parent = parent
+        @seat_map = seat_map
+      end
+
+      def blocks
+        @seat_map.blocks.each_with_object({}) do |seat_map_block, result|
+          result[seat_map_block.name] = seat_map_block
+        end
       end
 
       def name(value)
@@ -12,11 +19,12 @@ module MightyMaps
       end
 
       def point(value)
-        @block.points << value
+        binding.pry
+        @block.points = [@block.points, value].flatten(1) # force new array creation
       end
 
       def points(values)
-        @block.points.concat(values)
+        @block.points = values
       end
 
       def row(name = nil, **options, &block_param)

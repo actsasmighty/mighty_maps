@@ -9,7 +9,7 @@ module MightyMaps
       def block(name = nil, **options, &block_param)
         options[:name] = name || options[:name] || options["name"]
         @seat_map.blocks << new_block = Types::Block.new(options)
-        DSL::Block.new(new_block, parent: self, global: @global).tap do |block_dsl|
+        DSL::Block.new(new_block, global: @global, parent: self, seat_map: @seat_map).tap do |block_dsl|
           block_dsl.instance_exec(&block_param) if block_given?
         end
       end
