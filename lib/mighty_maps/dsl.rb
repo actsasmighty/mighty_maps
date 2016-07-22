@@ -1,7 +1,6 @@
 module MightyMaps
   class DSL
     autoload :Block, "mighty_maps/dsl/block"
-    autoload :Defaults, "mighty_maps/dsl/defaults"
     autoload :Row, "mighty_maps/dsl/row"
     autoload :SeatMap, "mighty_maps/dsl/seat_map"
 

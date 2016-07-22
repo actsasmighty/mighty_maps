@@ -36,9 +36,6 @@ module MightyMaps
           x: abs_x,
           y: abs_y,
         )
-        .tap do |r|
-          binding.pry
-        end
       end
 
       public # serialization

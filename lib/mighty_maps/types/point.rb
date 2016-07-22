@@ -6,8 +6,8 @@ module MightyMaps
       attr_accessor :x
       attr_accessor :y
 
-      include CallUnlessNil
-      include FixedPrecisionAdd
+      include MightyMaps::CallUnlessNil
+      include MightyMaps::FixedPrecisionAdd
 
       private :call_unless_nil
       private :fadd

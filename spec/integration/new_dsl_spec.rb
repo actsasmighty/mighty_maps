@@ -36,6 +36,7 @@ describe "Integration tests" do
 
       normalized_map = map.normalize
       binding.pry
+      normalized_map
     end
   end
 end

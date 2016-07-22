@@ -1,7 +1,7 @@
 module MightyMaps
   class DSL
     class SeatMap
-      def initialize(seat_map)
+      def initialize(seat_map = MightyMaps::Types::SeatMap.new)
         @global = Object.new
         @seat_map = seat_map
       end
